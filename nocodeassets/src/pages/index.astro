@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ListingCard from '../components/ListingCard.astro';
+
+const listings = await getCollection('listings');
+const featuredListings = listings.filter(listing => listing.data.featured);
+const regularListings = listings.filter(listing => !listing.data.featured);
+
+// Sort by published date (newest first)
+const sortedListings = [...regularListings].sort(
+  (a, b) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime()
+);
+---
+
+<Layout title="Home">
+  <div class="bg-indigo-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="text-center">
+        <h1 class="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
+          No-Code Templates & Assets
+        </h1>
+        <p class="mt-6 max-w-2xl mx-auto text-xl text-indigo-200">
+          Discover high-quality templates, components, and automation workflows for your no-code projects.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    {featuredListings.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Featured Assets</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredListings.map(listing => (
+            <ListingCard 
+              id={listing.data.id}
+              title={listing.data.title}
+              description={listing.data.description}
+              platform={listing.data.platform}
+              price={listing.data.price}
+              previewImageUrl={listing.data.previewImageUrl}
+              tags={listing.data.tags}
+              featured={true}
+            />
+          ))}
+        </div>
+      </div>
+    )}
+
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">All Assets</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedListings.map(listing => (
+        <ListingCard 
+          id={listing.data.id}
+          title={listing.data.title}
+          description={listing.data.description}
+          platform={listing.data.platform}
+          price={listing.data.price}
+          previewImageUrl={listing.data.previewImageUrl}
+          tags={listing.data.tags}
+        />
+      ))}
+    </div>
+  </div>
+</Layout>

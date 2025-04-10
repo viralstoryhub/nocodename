@@ -1,0 +1,7 @@
+In a real implementation, you would have actual image files here.
+For this MVP, you would need to add actual JPG/PNG files for:
+- dashboard-template.jpg
+- landing-page-template.jpg
+- automation-workflow.jpg
+
+These would be screenshots or mockups of the templates being sold.
